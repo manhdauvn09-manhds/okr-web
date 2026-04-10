@@ -1,0 +1,35 @@
+@okr.bossbuiltin OKR Web Application - Full system build
+ 
+Requirements:
+- docs/input/okr-requirement.md (main requirements)
+- docs/technical_architecture.md (tech stack)
+ 
+Change requests to include:
+- change-0404-sidebar.md: Members + OKR-all links only visible to Manager; Members page shows only member OKRs
+- change-0405.md: Max 3 KRs per Objective; Submit button requires ≥1 KR; After submit no edit/add/delete KR; Unsubmitted OKR only visible to creator
+- change-0406.md: Remove Owner field from Create Objective; Add Type field (Personal/Team); Employee can only select Personal; Manager can select Personal or Team
+ 
+Run full 13-step pipeline end-to-end and deliver working application.
+----------------------
+
+Hay them Logo FPT vao va them tinh nang login, logout, Progress thi de progress bar. Them ca tinh nang add new KR vao trong tung Objective nua.
+Ngoai ra hay them giup toi 5 User khac, moi User moi hay them Vai Objective voi Moi Objective co tu 3-5 KR. Chu y data them vao phai co y nghia
+----------------------
+Màn hình login thì Account không hiển thị full name mà hãy thay bằng tên account, chính là email, Quy tắc account Tên+chữ cái đầu của Họ+Chữ Cái đầu của Tên Đệm. Ví dụ tên là Dau Sy Manh thi account là ManhDS@fpt.com. Nếu bị trùng thì thêm số vào.
+Ở màn hình login hãy thêm password. Và để default là tự động autofill vào. Mật khẩu hãy thay lại hết cho account theo quy tắc là Tên account + LoveAI. Ví dụ: ManhDS@LoveAI.
+Thêm Data Đậu Sỹ Mạnh, quyền Manager.
+Thêm tính năng Report để member tự đánh giá các KR của mình đạt bao nhiêu %.
+Thêm tính năng Grade để đánh giá Objective của member (chỉ manager mới có quyền này). Grade có chọn 1 -> 5 sao. Và có nhận xét nữa.
+Màn hình login cho người manager thì có report toàn bộ thông tin các member, tình trạng đã report, tỉ lệ tự đánh giá, nếu được thử vẽ đồ thị gì đó.
+
+Data thì hãy cho vài người đã tự grade và chấm điểm của mình rồi. Có người 10%, có người >100% (ít thôi). Và thông thường từ 60%-80% thôi.
+Data và tên các Objective hay KR (key result) hãy đổi thành tiếng Việt có ý nghĩa vào nhé. Cho các bạn trong ngành IT của công ty FPT
+
+Hãy đổi style chuyên nghiệp và customize từ trang này https://ui-ux-pro-max-skill.nextlevelbuilder.io/
+--------------
+
+Step 1. Hướng dẫn tôi commit lên github
+Step 2. Hướng dẫn tôi git source trên github về Ubuntu server và build web lên để chạy. Thêm sub folder thành kiểu: http://ip server trên AWS/f-okr/ chi tiết để tôi deploy toàn bộ project này lên đó
+
+
+https://github.com/manhdauvn09-manhds/F-OKR.git

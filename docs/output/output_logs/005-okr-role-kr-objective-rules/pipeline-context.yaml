@@ -1,0 +1,27 @@
+feature-id: 005-okr-role-kr-objective-rules
+module-id: MOD-03
+module-keyword: objective-keyresult
+language: Vietnamese
+mode: autonomous
+inputs:
+  requirements: docs/input/okr-requirement.md
+  architecture: docs/technical_architecture.md
+  change-requests:
+    - docs/input/change-request/change-0404-sidebar.md
+    - docs/input/change-request/change-0405.md
+    - docs/input/change-request/change-0406.md
+steps:
+  step-01-srs: docs/output/ipa-docs/srs/mod03-okr-role-kr-objective-rules-srs.md
+  step-02-bd: docs/output/ipa-docs/bd/mod03-okr-role-kr-objective-rules-bd.md
+  step-03-spec: specs/005-okr-role-kr-objective-rules/spec.md
+  step-04-clarify: docs/output/output_logs/005-okr-role-kr-objective-rules/04-clarify.md
+  step-05-reviewspec: docs/output/output_logs/005-okr-role-kr-objective-rules/05-reviewspec.md
+  step-06-plan: specs/005-okr-role-kr-objective-rules/plan.md
+  step-07-reviewplan: docs/output/output_logs/005-okr-role-kr-objective-rules/07-reviewplan.md
+  step-08-dd: docs/output/ipa-docs/dd/mod03-okr-role-kr-objective-rules-dd.md
+  step-08b-testcase: docs/output/ipa-docs/testcase/mod03-okr-role-kr-objective-rules-testcases.md
+  step-09-tasks: specs/005-okr-role-kr-objective-rules/tasks.md
+  step-10-implement: docs/output/output_logs/005-okr-role-kr-objective-rules/10-implement.md
+  step-11-reviewcode: docs/output/output_logs/005-okr-role-kr-objective-rules/11-reviewcode.md
+  step-12-test: docs/output/ipa-docs/testreport/mod03-okr-role-kr-objective-rules-testreport.md
+  step-13-launch: docs/output/output_logs/005-okr-role-kr-objective-rules/13-launch.md

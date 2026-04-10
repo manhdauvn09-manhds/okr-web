@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  MANAGER
+  EMPLOYEE
+}
+
+enum ObjectiveType {
+  PERSONAL
+  TEAM
+}
+
+enum ObjectiveStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+}
+
+model User {
+  id         Int         @id @default(autoincrement())
+  name       String
+  role       Role
+  objectives Objective[]
+}
+
+model Objective {
+  id                  Int             @id @default(autoincrement())
+  title               String
+  description         String
+  quarter             String
+  type                ObjectiveType
+  isSubmitted         Boolean         @default(false)
+  status              ObjectiveStatus @default(DRAFT)
+  ownerRoleAtCreation Role
+  ownerId             Int
+  owner               User            @relation(fields: [ownerId], references: [id])
+  keyResults          KeyResult[]
+}
+
+model KeyResult {
+  id          Int       @id @default(autoincrement())
+  objectiveId Int
+  objective   Objective @relation(fields: [objectiveId], references: [id])
+  title       String
+  progress    Int
+  startValue  Int
+  targetValue Int
+  deadline    DateTime
+
+  @@index([objectiveId, deadline])
+}

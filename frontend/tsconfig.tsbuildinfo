@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/assets.d.ts","./src/main.tsx","./src/components/layout/applayout.tsx","./src/lib/api.ts","./src/pages/createobjectivepage.tsx","./src/pages/dashboardpage.tsx","./src/pages/loginpage.tsx","./src/pages/managerreportpage.tsx","./src/pages/memberspage.tsx","./src/pages/objectivedetailpage.tsx","./src/types/index.ts"],"errors":true,"version":"5.9.3"}
