@@ -1,4 +1,5 @@
 ﻿import { useMemo, useState } from 'react';
+import { useI18n } from '../lib/i18n';
 import { Objective } from '../types';
 
 interface Props {
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export function MembersPage({ objectives, onOpenObjective }: Props) {
+  const { t } = useI18n();
   const [query, setQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState<'ALL' | 'PERSONAL' | 'TEAM'>('ALL');
 
@@ -19,13 +21,13 @@ export function MembersPage({ objectives, onOpenObjective }: Props) {
 
   return (
     <div className="page-container">
-      <h1 className="page-title">👥 Objectives thành viên</h1>
-      <p className="meta-line">Chỉ hiển thị objective đã submit từ Employee.</p>
+      <h1 className="page-title">{t('members.title')}</h1>
+      <p className="meta-line">{t('members.hint')}</p>
 
-      <div className="filter-bar">
-        <input className="field-input" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Tìm theo tên objective hoặc thành viên" />
+      <div className="filter-bar two-col">
+        <input className="field-input" value={query} onChange={(e) => setQuery(e.target.value)} placeholder={t('members.searchPlaceholder')} />
         <select className="field-select" value={typeFilter} onChange={(e) => setTypeFilter(e.target.value as typeof typeFilter)}>
-          <option value="ALL">Tất cả loại</option>
+          <option value="ALL">{t('dash.allType')}</option>
           <option value="PERSONAL">Personal</option>
           <option value="TEAM">Team</option>
         </select>
@@ -58,11 +60,11 @@ export function MembersPage({ objectives, onOpenObjective }: Props) {
               </div>
               <span className="meta-line">{avgP}% tiến độ · {o.keyResults.length} KR</span>
             </div>
-            <button className="btn-outline btn-sm" style={{ marginTop: 12 }} onClick={() => onOpenObjective(o.id)}>Xem chi tiết</button>
+            <button className="btn-primary btn-sm" style={{ marginTop: 12 }} onClick={() => onOpenObjective(o.id)}>{t('dash.viewDetail')}</button>
           </div>
         );
       })}
-      {filtered.length === 0 && <p className="meta-line">Không có objective nào phù hợp.</p>}
+      {filtered.length === 0 && <p className="meta-line">{t('members.noResult')}</p>}
     </div>
   );
 }

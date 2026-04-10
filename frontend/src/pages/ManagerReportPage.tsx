@@ -1,3 +1,4 @@
+import { useI18n } from '../lib/i18n';
 import { MemberReportEntry } from '../types';
 
 interface Props {
@@ -61,6 +62,7 @@ function SvgBarChart({ data }: { data: { label: string; value: number; color: st
 const COLORS = ['#6366f1', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6'];
 
 export function ManagerReportPage({ report }: Props) {
+  const { t } = useI18n();
   const reported = report.filter((r) => r.reportedKrs > 0);
   const graded = report.filter((r) => r.gradedObjectives > 0);
   const totalMembers = report.length;
@@ -73,24 +75,24 @@ export function ManagerReportPage({ report }: Props) {
 
   return (
     <div className="page-container">
-      <h1 className="page-title">📊 Báo cáo Team – OKR Overview</h1>
+      <h1 className="page-title">{t('report.title')}</h1>
 
       {/* ── KPI summary ── */}
       <div className="kpi-grid">
         <div className="kpi-card">
-          <span className="kpi-label">Tổng thành viên</span>
+          <span className="kpi-label">{t('report.totalMembers')}</span>
           <strong className="kpi-value">{totalMembers}</strong>
         </div>
         <div className="kpi-card">
-          <span className="kpi-label">Đã self-report</span>
+          <span className="kpi-label">{t('report.selfReported')}</span>
           <strong className="kpi-value accent-green">{reported.length}/{totalMembers}</strong>
         </div>
         <div className="kpi-card">
-          <span className="kpi-label">Đã được chấm điểm</span>
+          <span className="kpi-label">{t('report.graded')}</span>
           <strong className="kpi-value accent-blue">{graded.length}/{totalMembers}</strong>
         </div>
         <div className="kpi-card">
-          <span className="kpi-label">Tỷ lệ tự đánh giá TB</span>
+          <span className="kpi-label">{t('report.avgSelfReport')}</span>
           <strong className="kpi-value accent-violet">
             {reported.length > 0
               ? Math.round(

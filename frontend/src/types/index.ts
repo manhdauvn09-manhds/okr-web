@@ -6,6 +6,7 @@ export interface User {
   name: string;
   role: UserRole;
   email: string;
+  managerId?: number;
 }
 
 export interface KeyResult {
@@ -52,4 +53,18 @@ export interface MemberReportEntry {
   avgSelfReportPercent: number | null;
   avgProgress: number;
   objectives: Objective[];
+}
+
+export interface SubsidiariesData {
+  myDraftCount: number;
+  myDraftObjectives: { id: number; title: string; krCount: number }[];
+  myKrsWithoutSelfReport: { objectiveId: number; objectiveTitle: string; krId: number; krTitle: string }[];
+  mySelfReportPendingCount: number;
+  isManager: boolean;
+  totalTeamMembers: number;
+  membersFullySubmitted: number;
+  membersNotSubmitted: { memberId: number; memberName: string; totalObjectives: number; submittedObjectives: number }[];
+  membersPendingReview: { memberId: number; memberName: string; objectiveId: number; objectiveTitle: string }[];
+  objectivesPendingGrade: number;
+  objectivesGraded: number;
 }

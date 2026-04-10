@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useI18n } from '../lib/i18n';
 import { Objective } from '../types';
 
 interface Props {
@@ -8,6 +9,7 @@ interface Props {
 }
 
 export function DashboardPage({ objectives, onOpenObjective, onAddNewKr }: Props) {
+  const { t } = useI18n();
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<'ALL' | 'DRAFT' | 'SUBMITTED' | 'APPROVED'>('ALL');
   const [type, setType] = useState<'ALL' | 'PERSONAL' | 'TEAM'>('ALL');
@@ -32,70 +34,85 @@ export function DashboardPage({ objectives, onOpenObjective, onAddNewKr }: Props
   }, [objectives, search, status, type]);
 
   return (
-    <div>
-      <h1>Dashboard</h1>
+    <div className="page-container">
+      <h1 className="page-title">{t('dash.title')}</h1>
 
       <div className="stats-grid">
         <div className="stat-card">
-          <span>Total Objectives</span>
+          <span>{t('dash.totalObj')}</span>
           <strong>{objectives.length}</strong>
         </div>
         <div className="stat-card">
-          <span>Total KRs</span>
+          <span>{t('dash.totalKr')}</span>
           <strong>{totalKrs}</strong>
         </div>
         <div className="stat-card">
-          <span>Submitted</span>
+          <span>{t('dash.submitted')}</span>
           <strong>{objectives.filter((o) => o.status === 'SUBMITTED').length}</strong>
         </div>
         <div className="stat-card">
-          <span>Avg KR Progress</span>
+          <span>{t('dash.avgProgress')}</span>
           <strong>{averageProgress}%</strong>
         </div>
       </div>
 
-      <div className="card filter-panel">
-        <div className="grid" style={{ gridTemplateColumns: '2fr 1fr 1fr', gap: 10 }}>
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by objective title or description"
-          />
-          <select value={status} onChange={(e) => setStatus(e.target.value as typeof status)}>
-            <option value="ALL">All status</option>
-            <option value="DRAFT">Draft</option>
-            <option value="SUBMITTED">Submitted</option>
-            <option value="APPROVED">Approved</option>
-          </select>
-          <select value={type} onChange={(e) => setType(e.target.value as typeof type)}>
-            <option value="ALL">All type</option>
-            <option value="PERSONAL">Personal</option>
-            <option value="TEAM">Team</option>
-          </select>
-        </div>
+      <div className="filter-bar">
+        <input
+          className="field-input"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder={t('dash.searchPlaceholder')}
+        />
+        <select className="field-select" value={status} onChange={(e) => setStatus(e.target.value as typeof status)}>
+          <option value="ALL">{t('dash.allStatus')}</option>
+          <option value="DRAFT">Draft</option>
+          <option value="SUBMITTED">Submitted</option>
+          <option value="APPROVED">Approved</option>
+        </select>
+        <select className="field-select" value={type} onChange={(e) => setType(e.target.value as typeof type)}>
+          <option value="ALL">{t('dash.allType')}</option>
+          <option value="PERSONAL">Personal</option>
+          <option value="TEAM">Team</option>
+        </select>
       </div>
 
-      {filteredObjectives.map((o) => (
-        <div className="card" key={o.id}>
-          <div className="row" style={{ justifyContent: 'space-between' }}>
-            <h3>{o.title}</h3>
-            <span className="chip">
-              {o.type} | {o.status}
-            </span>
+      {filteredObjectives.map((o) => {
+        const canAddKr = !o.isSubmitted && o.status !== 'APPROVED' && o.keyResults.length < 3;
+        return (
+          <div className="card" key={o.id}>
+            <div className="card-header">
+              <div>
+                <h3 className="card-title">{o.title}</h3>
+                <p className="meta-line" style={{ marginTop: 4 }}>{o.description}</p>
+              </div>
+              <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+                <span className={`chip chip-type-${o.type.toLowerCase()}`}>{o.type}</span>
+                <span className={`chip chip-status-${o.status.toLowerCase()}`}>{o.status}</span>
+              </div>
+            </div>
+            <p className="meta-line" style={{ marginTop: 8 }}>
+              📅 {o.quarter} &nbsp;·&nbsp; Key Results: {o.keyResults.length}/3
+            </p>
+            <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
+              <button className="btn-primary btn-sm" onClick={() => onOpenObjective(o.id)}>
+                {t('dash.viewDetail')}
+              </button>
+              <button
+                className="secondary btn-sm"
+                onClick={() => onAddNewKr(o.id)}
+                disabled={!canAddKr}
+              >
+                {t('dash.addKr')}
+              </button>
+            </div>
           </div>
-          <p>{o.description}</p>
-          <p className="meta-line">
-            Quarter: {o.quarter} | KRs: {o.keyResults.length}/3
-          </p>
-          <div className="row">
-            <button onClick={() => onOpenObjective(o.id)}>Detail</button>
-            <button className="secondary" onClick={() => onAddNewKr(o.id)}>
-              Add New KR
-            </button>
-          </div>
+        );
+      })}
+      {filteredObjectives.length === 0 && (
+        <div className="empty-state">
+          <p>Không có objective nào phù hợp với bộ lọc.</p>
         </div>
-      ))}
-      {filteredObjectives.length === 0 && <p>No objectives matched your filters.</p>}
+      )}
     </div>
   );
 }

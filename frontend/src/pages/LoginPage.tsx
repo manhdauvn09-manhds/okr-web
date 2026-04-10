@@ -1,6 +1,8 @@
 import { FormEvent, useEffect, useState } from 'react';
-import logo from '../assets/fpt-logo.svg';
+import { useI18n } from '../lib/i18n';
 import { User } from '../types';
+
+const logo = 'https://mms.businesswire.com/media/20230801164604/en/698855/5/FPT_Software_Doc.jpg';
 
 interface Props {
   users: User[];
@@ -13,6 +15,7 @@ function derivePassword(email: string): string {
 }
 
 export function LoginPage({ users, onLogin, error }: Props) {
+  const { t } = useI18n();
   const [email, setEmail] = useState(users[0]?.email ?? '');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -44,14 +47,14 @@ export function LoginPage({ users, onLogin, error }: Props) {
         <div className="login-brand">
           <img src={logo} alt="FPT" className="fpt-logo" />
           <div>
-            <h1 className="login-title">FOKR Workspace</h1>
-            <p className="login-sub">FPT Software – OKR Management System</p>
+            <h1 className="login-title">{t('login.title')}</h1>
+            <p className="login-sub">{t('login.sub')}</p>
           </div>
         </div>
 
         <form onSubmit={submit} className="login-form">
           <div className="field-group">
-            <label className="field-label">Tài khoản</label>
+            <label className="field-label">{t('login.account')}</label>
             <select
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -66,7 +69,7 @@ export function LoginPage({ users, onLogin, error }: Props) {
           </div>
 
           <div className="field-group">
-            <label className="field-label">Mật khẩu</label>
+            <label className="field-label">{t('login.password')}</label>
             <div className="pw-wrap">
               <input
                 type={showPw ? 'text' : 'password'}
@@ -85,13 +88,13 @@ export function LoginPage({ users, onLogin, error }: Props) {
                 {showPw ? '🙈' : '👁️'}
               </button>
             </div>
-            <p className="field-hint">Mật khẩu mặc định: &lt;tên tài khoản&gt;@LoveAI</p>
+            <p className="field-hint">{t('login.passwordHint')}</p>
           </div>
 
           {error && <div className="banner error"><span>{error}</span></div>}
 
           <button type="submit" className="btn-primary btn-full" disabled={loading}>
-            {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+            {loading ? t('login.loading') : t('login.submit')}
           </button>
         </form>
       </div>

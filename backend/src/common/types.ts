@@ -7,6 +7,7 @@ export interface User {
   role: UserRole;
   email: string;
   password: string;
+  managerId?: number;
 }
 
 export interface KeyResult {

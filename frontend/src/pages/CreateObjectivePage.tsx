@@ -1,4 +1,5 @@
 import { FormEvent, useMemo, useState } from 'react';
+import { useI18n } from '../lib/i18n';
 import { User } from '../types';
 
 interface Props {
@@ -16,6 +17,7 @@ export function CreateObjectivePage({ currentUser, onCreate }: Props) {
   const [description, setDescription] = useState('');
   const [quarter, setQuarter] = useState('Q2/2026');
   const [type, setType] = useState<'PERSONAL' | 'TEAM'>('PERSONAL');
+  const { t } = useI18n();
 
   const allowedTypes = useMemo(() => {
     return currentUser.role === 'MANAGER' ? ['PERSONAL', 'TEAM'] : ['PERSONAL'];
@@ -31,36 +33,51 @@ export function CreateObjectivePage({ currentUser, onCreate }: Props) {
   };
 
   return (
-    <div className="card">
-      <h1>Create Objective</h1>
-      <p className="meta-line">
-        Owner is automatically the current user. Employees can create only PERSONAL objectives.
-      </p>
-      <form onSubmit={submit} className="grid">
-        <label className="field-label">Title</label>
-        <input value={title} onChange={(e) => setTitle(e.target.value)} required />
+    <div className="page-container">
+      <h1 className="page-title">{t('create.title')}</h1>
+      <div className="card">
+        <p className="meta-line" style={{ marginBottom: 20 }}>
+          {t('create.hint')}
+        </p>
+        <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+          <div className="field-group">
+            <label className="field-label">{t('create.labelTitle')}</label>
+            <input className="field-input" value={title} onChange={(e) => setTitle(e.target.value)} required placeholder={t('create.placeholderTitle')} />
+          </div>
 
-        <label className="field-label">Description</label>
-        <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
+          <div className="field-group">
+            <label className="field-label">{t('create.labelDesc')}</label>
+            <textarea className="field-input" value={description} onChange={(e) => setDescription(e.target.value)} required placeholder={t('create.placeholderDesc')} />
+          </div>
 
-        <label className="field-label">Quarter</label>
-        <input value={quarter} onChange={(e) => setQuarter(e.target.value)} required />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <div className="field-group">
+              <label className="field-label">{t('create.quarter')}</label>
+              <input className="field-input" value={quarter} onChange={(e) => setQuarter(e.target.value)} required />
+            </div>
 
-        <label className="field-label">Type</label>
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value as 'PERSONAL' | 'TEAM')}
-          required
-        >
-          {allowedTypes.map((t) => (
-            <option key={t} value={t}>
-              {t}
-            </option>
-          ))}
-        </select>
+            <div className="field-group">
+              <label className="field-label">{t('create.type')}</label>
+              <select
+                className="field-select"
+                value={type}
+                onChange={(e) => setType(e.target.value as 'PERSONAL' | 'TEAM')}
+                required
+              >
+                {allowedTypes.map((t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
 
-        <button type="submit">Save Objective</button>
-      </form>
+          <button type="submit" className="btn-primary" style={{ alignSelf: 'flex-start', marginTop: 4 }}>
+            {t('create.save')}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

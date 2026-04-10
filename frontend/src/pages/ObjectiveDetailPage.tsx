@@ -1,4 +1,5 @@
 ﻿import { FormEvent, useState } from 'react';
+import { useI18n } from '../lib/i18n';
 import { Objective } from '../types';
 
 interface Props {
@@ -56,11 +57,12 @@ export function ObjectiveDetailPage({
   const [gradeStars, setGradeStars] = useState(0);
   const [gradeComment, setGradeComment] = useState('');
   const [grading, setGrading] = useState(false);
+  const { t } = useI18n();
 
   if (!objective) {
     return (
       <div className="empty-state">
-        <p>Chọn một objective từ dashboard để xem chi tiết.</p>
+        <p>{t('detail.select')}</p>
       </div>
     );
   }
@@ -124,14 +126,14 @@ export function ObjectiveDetailPage({
 
         <div className="detail-progress-row">
           <div className="progress-col">
-            <p className="progress-label">Tiến độ thực tế: <strong>{overallProgress}%</strong></p>
+            <p className="progress-label">{t('detail.actualProgress')}: <strong>{overallProgress}%</strong></p>
             <div className="progress-track">
               <div className="progress-fill" style={{ width: `${Math.min(100, overallProgress)}%` }} />
             </div>
           </div>
           {avgSelfReport !== null && (
             <div className="progress-col">
-              <p className="progress-label">Tự đánh giá TB: <strong className={avgSelfReport > 100 ? 'text-amber' : 'text-green'}>{avgSelfReport}%</strong></p>
+              <p className="progress-label">{t('detail.selfReportAvg')}: <strong className={avgSelfReport > 100 ? 'text-amber' : 'text-green'}>{avgSelfReport}%</strong></p>
               <div className="progress-track">
                 <div className="progress-fill self-fill" style={{ width: `${Math.min(100, avgSelfReport)}%` }} />
               </div>
@@ -142,10 +144,11 @@ export function ObjectiveDetailPage({
         {!objective.isSubmitted && isOwner && (
           <button
             className="btn-primary"
+            style={{ marginTop: 12 }}
             disabled={objective.keyResults.length < 1}
             onClick={onSubmitObjective}
           >
-            Submit Objective
+            {t('detail.submit')}
           </button>
         )}
       </div>
@@ -154,7 +157,7 @@ export function ObjectiveDetailPage({
       {objective.grade && (
         <div className="grade-display-card">
           <div className="grade-display-header">
-            <span className="grade-display-label">Đánh giá từ Manager</span>
+            <span className="grade-display-label">{t('detail.gradeFromManager')}</span>
             <span className="star-display">
               {[1,2,3,4,5].map((s) => (
                 <span key={s} className={s <= objective.grade!.stars ? 'star on' : 'star off'}>★</span>
@@ -170,24 +173,24 @@ export function ObjectiveDetailPage({
       {/* ── Grade form for manager ── */}
       {isManager && objective.isSubmitted && !objective.grade && (
         <div className="grade-form-card">
-          <h3 className="section-title">⭐ Chấm điểm Objective này</h3>
+          <h3 className="section-title">{t('detail.gradeSection')}</h3>
           <form onSubmit={submitGrade} className="grade-form">
             <div className="field-group">
-              <label className="field-label">Điểm đánh giá</label>
+              <label className="field-label">{t('detail.gradeLabel')}</label>
               <StarPicker value={gradeStars} onChange={setGradeStars} />
             </div>
             <div className="field-group">
-              <label className="field-label">Nhận xét</label>
+              <label className="field-label">{t('detail.commentLabel')}</label>
               <textarea
                 className="field-input"
                 value={gradeComment}
                 onChange={(e) => setGradeComment(e.target.value)}
-                placeholder="Nhận xét về kết quả đạt được..."
+                placeholder={t('detail.commentPlaceholder')}
                 required
               />
             </div>
             <button type="submit" className="btn-primary" disabled={!gradeStars || grading}>
-              {grading ? 'Đang lưu...' : 'Lưu đánh giá'}
+              {grading ? t('detail.saving') : t('detail.saveGrade')}
             </button>
           </form>
         </div>
@@ -195,7 +198,7 @@ export function ObjectiveDetailPage({
 
       {/* ── Key Results ── */}
       <div className="kr-section">
-        <h2 className="section-title">Key Results ({objective.keyResults.length}/3)</h2>
+        <h2 className="section-title">{t('detail.krSection')} ({objective.keyResults.length}/3)</h2>
 
         {objective.keyResults.map((kr) => (
           <div key={kr.id} className="kr-card">
@@ -231,16 +234,16 @@ export function ObjectiveDetailPage({
               )}
             </div>
 
-            <p className="kr-values">Bắt đầu: {kr.startValue} → Mục tiêu: {kr.targetValue}</p>
+            <p className="kr-values">{t('detail.startValue')}: {kr.startValue} → {t('detail.targetValue')}: {kr.targetValue}</p>
 
             <div className="kr-actions">
               {!isManager && (
                 <>
                   <button
-                    className="btn-sm btn-outline"
+                    className="btn-sm btn-primary"
                     onClick={() => void onUpdateProgress(kr.id, Math.min(100, kr.progress + 10))}
                   >
-                    +10% Tiến độ
+                    {t('detail.addProgress')}
                   </button>
                   {objective.isSubmitted && isOwner && (
                     <div className="self-report-inline">
@@ -257,7 +260,7 @@ export function ObjectiveDetailPage({
                         onClick={() => void submitReport(kr.id)}
                         disabled={!reportValues[kr.id]}
                       >
-                        Báo cáo
+                        {t('detail.report')}
                       </button>
                     </div>
                   )}
@@ -265,7 +268,7 @@ export function ObjectiveDetailPage({
               )}
               {canMutateKr && isOwner && (
                 <button className="btn-sm btn-danger" onClick={() => void onDeleteKr(kr.id)}>
-                  Xóa KR
+                  {t('detail.deleteKr')}
                 </button>
               )}
             </div>
@@ -275,30 +278,30 @@ export function ObjectiveDetailPage({
         {/* ── Add KR form ── */}
         {canMutateKr && isOwner && (
           <div className="add-kr-card">
-            <h3 className="section-title">+ Thêm Key Result</h3>
+            <h3 className="section-title">{t('detail.addKrTitle')}</h3>
             {objective.keyResults.length >= 3 && (
               <p className="field-hint">Đã đạt tối đa 3 KR. Xóa một KR để thêm mới.</p>
             )}
             <form onSubmit={addKr} className="add-kr-form">
               <div className="field-group">
-                <label className="field-label">Tên Key Result</label>
-                <input className="field-input" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Ví dụ: Hoàn thành 5 module training" required disabled={objective.keyResults.length >= 3} />
+                <label className="field-label">{t('detail.krTitleLabel')}</label>
+                <input className="field-input" value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t('detail.krTitlePlaceholder')} required disabled={objective.keyResults.length >= 3} />
               </div>
               <div className="form-row-3">
                 <div className="field-group">
-                  <label className="field-label">Giá trị bắt đầu</label>
+                  <label className="field-label">{t('detail.startLabel')}</label>
                   <input type="number" className="field-input" value={startValue} onChange={(e) => setStartValue(Number(e.target.value))} disabled={objective.keyResults.length >= 3} />
                 </div>
                 <div className="field-group">
-                  <label className="field-label">Mục tiêu</label>
+                  <label className="field-label">{t('detail.targetLabel')}</label>
                   <input type="number" className="field-input" value={targetValue} onChange={(e) => setTargetValue(Number(e.target.value))} disabled={objective.keyResults.length >= 3} />
                 </div>
                 <div className="field-group">
-                  <label className="field-label">Deadline</label>
+                  <label className="field-label">{t('detail.deadlineLabel')}</label>
                   <input type="date" className="field-input" value={deadline} onChange={(e) => setDeadline(e.target.value)} disabled={objective.keyResults.length >= 3} />
                 </div>
               </div>
-              <button type="submit" className="btn-primary" disabled={objective.keyResults.length >= 3}>Thêm KR</button>
+              <button type="submit" className="btn-primary" disabled={objective.keyResults.length >= 3}>{t('detail.addKrBtn')}</button>
             </form>
           </div>
         )}

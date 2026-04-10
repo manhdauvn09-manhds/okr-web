@@ -1,4 +1,4 @@
-﻿import { MemberReportEntry, Objective, User } from '../types';
+﻿import { MemberReportEntry, Objective, SubsidiariesData, User } from '../types';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000';
 
@@ -96,4 +96,34 @@ export async function gradeObjective(userId: number, objectiveId: number, stars:
     method: 'POST',
     body: JSON.stringify({ stars, comment }),
   });
+}
+
+// ── Delegation APIs ──
+
+export async function getTeamMembers(userId: number) {
+  return request<{ members: User[] }>('/delegation/team', userId, { method: 'GET' });
+}
+
+export async function getAllManagers() {
+  return request<{ managers: User[] }>('/delegation/managers', null, { method: 'GET' });
+}
+
+export async function assignMember(userId: number, memberId: number, targetManagerId: number) {
+  return request<{ success: boolean }>('/delegation/assign', userId, {
+    method: 'POST',
+    body: JSON.stringify({ memberId, targetManagerId }),
+  });
+}
+
+export async function promoteMember(userId: number, memberId: number) {
+  return request<{ success: boolean }>('/delegation/promote', userId, {
+    method: 'POST',
+    body: JSON.stringify({ memberId }),
+  });
+}
+
+// ── Subsidiaries API ──
+
+export async function getSubsidiaries(userId: number) {
+  return request<SubsidiariesData>('/subsidiaries', userId, { method: 'GET' });
 }
