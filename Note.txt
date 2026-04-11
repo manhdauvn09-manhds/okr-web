@@ -54,6 +54,10 @@ Menu chuyển ngôn ngữ thì thêm cờ các nước bên cạnh vào ngoài t
 Hãy thêm 1 menu lớn Hướng dẫn sử dụng. Và hãy viết tài liệu user manual hướng dẫn sử dụng các tính năng của cả trang Web này. Mỗi màn hình là 1 submenu và hướng dẫn cách dùng, tạo data, nhấn button như thế nào thì sẽ làm được gì và đi đến đâu chi tiết để người không biết gì cũng đọc là dùng được trang web này.
 Phần menu Hướng dẫn này hãy để style hoặc màu hơi khác thể hiện nó là phần riêng (phụ) nhé!
 
+-------------
+"Menu chuyển ngôn ngữ thì thêm cờ các nước" là logo lá cờ của 3 nước Việt Nam,  Anh, Nhật ấy. -> Hãy tìm và thay vào vị trí các menu chuyển ngữ đó (logo cờ + chữ viết Tắt Ngôn ngữ: VN, EN, JP).
+Phần hướng dẫn sử dụng hãy chụp hình 1 màn hình đó và các hướng dẫn nên trực quan hơn.
+
 
 =========================
 
@@ -62,3 +66,24 @@ Step 2. Hướng dẫn tôi git source trên github về Ubuntu server và build
 
 
 https://github.com/manhdauvn09-manhds/F-OKR.git
+
+===============
+
+Tôi muốn Giờ hãy hướng dẫn tôi cách build riêng 1 web khác cùng trên 1 server ubuntu để chạy song với với version okr-web cũ đã build (trên cùng IP) đó thì hướng dẫn toàn bộ giúp tôi.
+Ubuntu đó là chạy trên AWS, ip public là 52.62.81.34.
+Version okr-web cũ đang chạy ở link http://52.62.81.34/f-okr/. Tuy nhiên khi vào các link con của nó thì nó vẫn không chèn thêm /f-okr/ vào đâu. Ví dụ http://52.62.81.34/okr-all, http://52.62.81.34/team-report, ...
+
+Tôi muốn get source trên github về folder khác và build bằng Docker và tạo ra subfolder kiểu gì để version mới này chạy độc lập mà không ảnh hưởng cái web cũ kia. Hãy tạo file script copy dễ dàng từng việc/nhóm việc.
+
+-------------------
+
+Deploy============
+# 1. Clone source
+sudo apt-get update -y && sudo apt-get install -y git
+sudo git clone https://github.com/manhdauvn09-manhds/okr-web.git /opt/okr-web
+sudo chown -R $USER:$USER /opt/okr-web
+cd /opt/okr-web
+
+# 2. Cấp quyền & chạy deploy
+chmod +x deploy.sh
+./deploy.sh

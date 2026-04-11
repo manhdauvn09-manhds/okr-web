@@ -1,6 +1,0 @@
-services:
-  okrweb:
-    image: okrweb
-    build:
-      context: .
-      dockerfile: ./Dockerfile
