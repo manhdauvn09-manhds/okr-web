@@ -1,6 +1,6 @@
 ﻿import { MemberReportEntry, Objective, SubsidiariesData, User } from '../types';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api';
 
 async function request<T>(
   path: string,
