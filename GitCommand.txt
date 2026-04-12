@@ -1,0 +1,98 @@
+
+
+
+=========OK=====
+
+# 1. Dừng tất cả Docker
+docker stop $(docker ps -aq) 2>/dev/null
+docker rm $(docker ps -aq) 2>/dev/null
+
+# 2. Tắt nginx host (nếu đang chạy)
+sudo systemctl stop nginx 2>/dev/null
+sudo systemctl disable nginx 2>/dev/null
+
+# 3. Kiểm tra port 80 đã free chưa
+sudo ss -tlnp | grep :80
+
+# 4. Nếu vẫn còn process chiếm port 80, kill nó
+sudo fuser -k 80/tcp 2>/dev/null
+
+# 5. Clean Docker hoàn toàn
+docker system prune -a --volumes -f
+docker builder prune -a -f
+
+# 6. Pull source mới & rebuild
+cd /opt/okr-web
+git pull origin main
+docker compose up --build -d
+
+# 7. Kiểm tra
+sleep 10
+docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+-------------
+http://45.77.183.130/f-okr/
+
+==================
+cd e:\SourceCode\okr-web\okr-web
+
+git init
+git branch -M main
+
+# Tạo .gitignore
+@"
+node_modules/
+dist/
+.env
+*.log
+backend/dist/
+frontend/dist/
+"@ | Set-Content .gitignore
+
+git add .
+git commit -m "Initial commit: OKR web app with FPT data and new features"
+
+git remote add origin https://github.com/manhdauvn09-manhds/F-OKR.git
+git push -u origin main
+
+=========
+# 1) (Nếu chưa có) cài git
+sudo apt update && sudo apt install -y git
+
+# 2) Clone repo về máy (tạo thư mục okr-web)
+git clone https://github.com/manhdauvn09-manhds/okr-web.git
+
+# 3) Vào thư mục project
+cd okr-web
+
+----
+git clone https://github.com/manhdauvn09-manhds/okr-web.git ten-thu-muc-ban-muon
+
+
+Nếu bạn muốn “get đè” (lấy lại code mới nhất và ghi đè lên thư mục đang có), có 2 cách phổ biến:
+Cách 1 (khuyến nghị): Reset sạch về đúng trạng thái remote (mất mọi sửa đổi local)
+Chạy trong thư mục repo:
+cd /duong/dan/toi/okr-web
+
+git fetch --all
+git reset --hard origin/main   # nếu nhánh chính là main
+git clean -fd                  # xóa file/thư mục chưa được git theo dõi
+
+Nếu repo dùng nhánh master thì đổi origin/main thành:
+git reset --hard origin/master
+
+Bạn có thể xem nhánh đang theo dõi là gì bằng:
+git branch -vv
+
+Cách 2: Xóa thư mục cũ rồi clone lại (đơn giản, chắc chắn)
+Ở thư mục cha (parent):
+rm -rf okr-web
+git clone https://github.com/manhdauvn09-manhds/okr-web.git
+
+
+Nếu bạn muốn giữ lại một phần thay đổi local (không muốn mất hết), nói mình biết bạn có cần giữ gì không (ví dụ .env, file config), mình sẽ hướng dẫn cách backup/stash trước khi “get đè”.
+
+^^^^^^^^^^^
+cd /opt/okr-web
+git pull origin main
+docker compose down
+docker compose up --build -d

@@ -61,8 +61,13 @@ export function App() {
   const isManager = currentUser?.role === 'MANAGER';
 
   const loadUsers = async () => {
-    const res = await getUsers();
-    setUsers(res.users);
+    try {
+      const res = await getUsers();
+      setUsers(res.users);
+    } catch (e) {
+      console.error('[OKR] Failed to load users:', e);
+      setError(`API Error: ${e}`);
+    }
   };
 
   const loadObjectives = async () => {
@@ -141,7 +146,7 @@ export function App() {
   const selectedObjective = objectives.find((o) => o.id === selectedObjectiveId)
     ?? memberObjectives.find((o) => o.id === selectedObjectiveId);
 
-  if (users.length === 0) return <div className="content">{t('login.loading2')}</div>;
+  if (users.length === 0) return <div className="content">{error ? <p style={{color:'red',padding:20}}>{error}<br/><small>BASE_URL: check console (F12)</small></p> : t('login.loading2')}</div>;
 
   if (!currentUser) {
     return (
